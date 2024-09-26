@@ -1,12 +1,12 @@
 Class {
-	#name : 'PawnMove',
+	#name : 'PawnMoveTests',
 	#superclass : 'TestCase',
 	#category : 'Myg-Chess-Tests',
 	#package : 'Myg-Chess-Tests'
 }
 
 { #category : 'tests' }
-PawnMove >> testPawnCanCaptureDiagonally [
+PawnMoveTests >> testPawnCanCaptureDiagonally [
 
 	| whitePawn blackPawn board squares |
 	board := MyChessBoard empty.
@@ -25,7 +25,7 @@ PawnMove >> testPawnCanCaptureDiagonally [
 ]
 
 { #category : 'tests' }
-PawnMove >> testPawnCanMoveOneSquareAfterFirstMove [
+PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove [
 
 	| pawn board squares |
 	board := MyChessBoard empty.
@@ -40,7 +40,7 @@ PawnMove >> testPawnCanMoveOneSquareAfterFirstMove [
 ]
 
 { #category : 'tests' }
-PawnMove >> testPawnCannotCaptureStraightAhead [
+PawnMoveTests >> testPawnCannotCaptureStraightAhead [
 
 	| whitePawn blackPawn board squares |
 	board := MyChessBoard empty.
@@ -59,7 +59,7 @@ PawnMove >> testPawnCannotCaptureStraightAhead [
 ]
 
 { #category : 'tests' }
-PawnMove >> testPawnCannotMoveTwoSquaresAfterFirstMove [
+PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove [
 
 	| pawn board squares |
 	board := MyChessBoard empty.
@@ -75,7 +75,7 @@ PawnMove >> testPawnCannotMoveTwoSquaresAfterFirstMove [
 ]
 
 { #category : 'tests' }
-PawnMove >> testPawnFirstMoveOneSquare [
+PawnMoveTests >> testPawnFirstMoveOneSquare [
 
 	| pawn board squares |
 	board := MyChessBoard empty.
@@ -88,7 +88,7 @@ PawnMove >> testPawnFirstMoveOneSquare [
 ]
 
 { #category : 'tests' }
-PawnMove >> testPawnFirstMoveTwoSquares [
+PawnMoveTests >> testPawnFirstMoveTwoSquares [
 
 	| pawn board squares |
 	board := MyChessBoard empty.
