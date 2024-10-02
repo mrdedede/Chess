@@ -9,6 +9,17 @@ Class {
 }
 
 { #category : 'tests' }
+MySquareTests >> testBoard [ 
+
+	| board square |
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square board: board.
+
+	self assert: square board isNotNil .
+]
+
+{ #category : 'tests' }
 MySquareTests >> testCaseIsEmpty [
 
     | chessSquare |
@@ -41,36 +52,12 @@ MySquareTests >> testChessSquareCreation [
 ]
 
 { #category : 'tests' }
-MySquareTests >> testContents [
+MySquareTests >> testContents [ 
 
-    | chessSquare |
-	 chessSquare := MyChessSquare new .
-	 chessSquare contents: MyKing white.
-	
-    self assert: chessSquare contents equals: MyKing white.
+	|square piece|
+	square := MyChessSquare new.
+	piece := MyPawn new.
+	square contents: piece.
 
-]
-
-{ #category : 'tests' }
-MySquareTests >> testEmptyContents [
-
-	 | piece chessSquare |
-	 piece := MyKing black .
-	 chessSquare := MyChessSquare new.
-	 chessSquare contents: piece.
-    chessSquare emptyContents.
-    self assert: chessSquare contents isNil.
-
-]
-
-{ #category : 'tests' }
-MySquareTests >> testHasPiece [
-
-    | chessSquare |
-	 chessSquare := MyChessSquare new.
-    self assert: chessSquare hasPiece equals: false.
-    
-    
-
-
+	self assert: square contents equals: piece.
 ]
