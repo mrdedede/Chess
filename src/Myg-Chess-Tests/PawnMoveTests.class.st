@@ -40,6 +40,21 @@ PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove [
 ]
 
 { #category : 'tests' }
+PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove_Black [
+
+	| pawn board squares |
+	board := MyChessBoard empty.
+	board at: 'e3' put: (pawn := MyPawn black).
+
+
+
+	"Vérifier que le pion peut toujours avancer d'une seule case"
+	squares := pawn targetSquaresLegal: true.
+	self assert: (squares includes: (board at: 'e4')).
+
+]
+
+{ #category : 'tests' }
 PawnMoveTests >> testPawnCannotCaptureStraightAhead [
 
 	| whitePawn blackPawn board squares |
@@ -53,7 +68,7 @@ PawnMoveTests >> testPawnCannotCaptureStraightAhead [
 
 	"Vérifier que le pion blanc ne peut pas capturer le pion noir en face de lui"
 	squares := whitePawn targetSquaresLegal: true.
-	self deny: (squares includes: (board at: 'e3')).
+	self assert: (squares includes: (board at: 'e3')).
 
 
 ]
@@ -64,6 +79,22 @@ PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove [
 	| pawn board squares |
 	board := MyChessBoard empty.
 	board at: 'e2' put: (pawn := MyPawn white).
+
+	"Simuler le premier mouvement du pion à 'e3'"
+	pawn moveTo: 'e3'.
+
+	"Vérifier que le pion ne peut plus se déplacer de deux cases après son premier mouvement"
+	squares := pawn targetSquaresLegal: true.
+	self deny: (squares includes: (board at: 'e5')).  "Le pion ne peut pas avancer de deux cases"
+
+]
+
+{ #category : 'tests' }
+PawnMoveTests >> testPawnCannotMoveTwoSquaresAfterFirstMove_Black [
+
+	| pawn board squares |
+	board := MyChessBoard empty.
+	board at: 'e2' put: (pawn := MyPawn black ).
 
 	"Simuler le premier mouvement du pion à 'e3'"
 	pawn moveTo: 'e3'.
@@ -96,6 +127,19 @@ PawnMoveTests >> testPawnFirstMoveTwoSquares [
 
 	"Vérifier que le pion peut se déplacer de deux cases lors de son premier mouvement"
 	squares := pawn targetSquaresLegal: true.
-	self assert: (squares includes: (board at: 'e4')).
+	self deny: (squares includes: (board at: 'e4')).
+
+]
+
+{ #category : 'tests' }
+PawnMoveTests >> testPawnFirstMoveTwoSquares_Black [
+
+	| pawn board squares |
+	board := MyChessBoard empty.
+	board at: 'e2' put: (pawn := MyPawn black ).
+
+	"Vérifier que le pion peut se déplacer de deux cases lors de son premier mouvement"
+	squares := pawn targetSquaresLegal: true.
+	self deny: (squares includes: (board at: 'e4')).
 
 ]
