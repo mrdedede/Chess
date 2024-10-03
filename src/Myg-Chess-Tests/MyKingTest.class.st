@@ -6,6 +6,12 @@ Class {
 }
 
 { #category : 'tests' }
+MyKingTest >> testId [
+
+	self assert: MyKing new id equals: 'K'
+]
+
+{ #category : 'tests' }
 MyKingTest >> testIsCheckByOpponentsBishop [
 
 	| king board |
@@ -68,6 +74,30 @@ MyKingTest >> testIsCheckByOpponentsRook [
 	board at: 'e1' put: MyRook black.
 
 	self assert: king isInCheck
+]
+
+{ #category : 'tests' }
+MyKingTest >> testIsCheckMated [
+
+	| king board |
+	board := MyChessBoard empty.
+	board at: 'a1' put: (king := MyKing white).
+
+	"Put an atacker rook on e column"
+	board at: 'e1' put: MyRook black.
+	board at: 'e2' put: MyRook black.
+
+	self assert: king isCheckMated 
+]
+
+{ #category : 'tests' }
+MyKingTest >> testIsKing [
+
+	| king board |
+	board := MyChessBoard empty.
+	board at: 'e4' put: (king := MyKing white).
+
+	self assert: king isKing
 ]
 
 { #category : 'tests' }
