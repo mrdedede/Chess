@@ -9,23 +9,22 @@ Class {
 }
 
 { #category : 'tests' }
+MySquareTests >> testBoard [ 
+
+	| board square |
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square board: board.
+
+	self assert: square board isNotNil .
+]
+
+{ #category : 'tests' }
 MySquareTests >> testCaseIsEmpty [
 
     | chessSquare |
 	 chessSquare := MyChessSquare new.
     self assert: chessSquare hasPiece equals: false.
-    
-    
-
-
-]
-
-{ #category : 'tests' }
-MySquareTests >> testCaseIsNotEmpty [
-
-    | chessSquare |
-	 chessSquare := MyChessSquare new.
-    self assert: chessSquare hasPiece equals: true.
     
     
 
@@ -41,36 +40,42 @@ MySquareTests >> testChessSquareCreation [
 ]
 
 { #category : 'tests' }
-MySquareTests >> testContents [
+MySquareTests >> testContents [ 
 
-    | chessSquare |
-	 chessSquare := MyChessSquare new .
-	 chessSquare contents: MyKing white.
-	
-    self assert: chessSquare contents equals: MyKing white.
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
 
+	self assert: square contents equals: piece.
 ]
 
 { #category : 'tests' }
-MySquareTests >> testEmptyContents [
+MySquareTests >> testEmptyContents [ 
 
-	 | piece chessSquare |
-	 piece := MyKing black .
-	 chessSquare := MyChessSquare new.
-	 chessSquare contents: piece.
-    chessSquare emptyContents.
-    self assert: chessSquare contents isNil.
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square emptyContents .
 
+	self assert: square contents equals: nil.
 ]
 
 { #category : 'tests' }
-MySquareTests >> testHasPiece [
+MySquareTests >> testHasPiece [ 
 
-    | chessSquare |
-	 chessSquare := MyChessSquare new.
-    self assert: chessSquare hasPiece equals: false.
-    
-    
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square hasPiece .
 
-
+	self deny: square contents equals: nil.
 ]
