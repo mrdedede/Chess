@@ -40,7 +40,20 @@ MySquareTests >> testChessSquareCreation [
 ]
 
 { #category : 'tests' }
-MySquareTests >> testContents [ 
+MySquareTests >> testColorSetter [
+
+    | square |
+    square := MyChessSquare new.
+	 square color: Color black.
+
+    self assert: square color equals: Color black.
+    
+    
+    
+]
+
+{ #category : 'tests' }
+MySquareTests >> testContentsSetter [
 
 	|square piece board|
 	board := MyChessBoard empty.
@@ -67,6 +80,20 @@ MySquareTests >> testEmptyContents [
 ]
 
 { #category : 'tests' }
+MySquareTests >> testEmptyContentsWithoutNilChecks [
+
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square emptyContents .
+
+	self assert: (square contents isKindOf: NullPiece).
+]
+
+{ #category : 'tests' }
 MySquareTests >> testHasPiece [ 
 
 	|square piece board|
@@ -78,4 +105,69 @@ MySquareTests >> testHasPiece [
 	square hasPiece .
 
 	self deny: square contents equals: nil.
+]
+
+{ #category : 'tests' }
+MySquareTests >> testHasPieceWithoutNilChecks [
+
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPiece new .
+	square contents: piece .
+	square hasPiece .
+
+	self assert: square hasPiece equals: piece.
+]
+
+{ #category : 'tests' }
+MySquareTests >> testInitializeBackgroudColorIsBlack [
+
+    | square |
+    square := MyChessSquare new.
+    
+    "Test that the background is white"
+    self assert: square background equals: Color black.
+    
+  
+]
+
+{ #category : 'tests' }
+MySquareTests >> testInitializeBackgroudColorIsWhite [
+
+    | square |
+    square := MyChessSquare new.
+    
+    "Test that the background is white"
+    self assert: square background equals: Color white.
+    
+  
+]
+
+{ #category : 'tests' }
+MySquareTests >> testInitializeLayout [
+
+    | square |
+    square := MyChessSquare new.
+    
+    
+    "Test that the layout is BlFrameLayout"
+    self assert: square layout class equals: BlFrameLayout.
+    
+    
+]
+
+{ #category : 'tests' }
+MySquareTests >> testNameSetter [
+
+    | square |
+    square := MyChessSquare new.
+	 square color: Color black.
+    square name: 'e4'.
+
+    self assert: square name equals: 'e4'.
+    
+    
+    
 ]
