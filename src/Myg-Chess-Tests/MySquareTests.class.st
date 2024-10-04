@@ -32,18 +32,6 @@ MySquareTests >> testCaseIsEmpty [
 ]
 
 { #category : 'tests' }
-MySquareTests >> testCaseIsNotEmpty [
-
-    | chessSquare |
-	 chessSquare := MyChessSquare new.
-    self assert: chessSquare hasPiece equals: true.
-    
-    
-
-
-]
-
-{ #category : 'tests' }
 MySquareTests >> testChessSquareCreation [
    | chessSquare |
    chessSquare := MyChessSquare new.   
@@ -54,10 +42,40 @@ MySquareTests >> testChessSquareCreation [
 { #category : 'tests' }
 MySquareTests >> testContents [ 
 
-	|square piece|
+	|square piece board|
+	board := MyChessBoard empty.
 	square := MyChessSquare new.
-	piece := MyPawn new.
-	square contents: piece.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
 
 	self assert: square contents equals: piece.
+]
+
+{ #category : 'tests' }
+MySquareTests >> testEmptyContents [ 
+
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square emptyContents .
+
+	self assert: square contents equals: nil.
+]
+
+{ #category : 'tests' }
+MySquareTests >> testHasPiece [ 
+
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square hasPiece .
+
+	self deny: square contents equals: nil.
 ]
