@@ -44,13 +44,13 @@ PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove_Black [
 
 	| pawn board squares |
 	board := MyChessBoard empty.
-	board at: 'e3' put: (pawn := MyPawn black).
+	board at: 'e6' put: (pawn := MyPawn black).
 
 
 
 	"Vérifier que le pion peut toujours avancer d'une seule case"
 	squares := pawn targetSquaresLegal: true.
-	self assert: (squares includes: (board at: 'e4')).
+	self assert: (squares includes: (board at: 'e5')).
 
 ]
 
