@@ -132,15 +132,14 @@ MyPiece >> isKing [
 ]
 
 { #category : 'testing' }
-MyPiece >> isPiece [
-	
-	^ true
+MyPiece >> isNullPiece [
+	^ false.
 ]
 
 { #category : 'testing' }
-MyPiece >> isTransparent [
+MyPiece >> isPiece [
 	
-	^ color isTransparent 
+	^ true
 ]
 
 { #category : 'testing' }

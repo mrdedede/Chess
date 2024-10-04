@@ -116,7 +116,7 @@ MySquareTests >> testHasPieceWithoutNilChecks [
 	board := MyChessBoard empty.
 	square := MyChessSquare new.
 	square := board at: 'e4'.
-	piece := MyPiece new .
+	piece := MyPawn white .
 	square contents: piece .
 	square hasPiece .
 
