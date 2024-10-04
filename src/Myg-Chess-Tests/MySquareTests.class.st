@@ -58,6 +58,8 @@ MySquareTests >> testContentsSetter [
 	|square piece board|
 	board := MyChessBoard empty.
 	square := MyChessSquare new.
+	square color: Color black.
+	square name: 'e4'.
 	square := board at: 'e4'.
 	piece := MyPawn white .
 	square contents: piece .
