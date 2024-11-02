@@ -55,6 +55,22 @@ PawnMoveTests >> testPawnCanMoveOneSquareAfterFirstMove_Black [
 ]
 
 { #category : 'tests' }
+PawnMoveTests >> testPawnCannoJumpOut_Of_anotherPawn_In_theFirst_move [
+	| pawn board squares |
+	board := MyChessBoard empty.
+	board at: 'e2' put: (pawn := MyPawn white).
+   board at: 'e3' put: (pawn := MyPawn black ).
+
+	"Simuler le premier mouvement du pion à 'e4'"
+	pawn moveTo: 'e4'.
+
+	"Vérifier que le pion ne peut plus sauter au dessu dun autre pion dans le premier move"
+	squares := pawn targetSquaresLegal: true.
+	self assert: (squares includes: (board at: 'e4')). 
+
+]
+
+{ #category : 'tests' }
 PawnMoveTests >> testPawnCannotCaptureStraightAhead [
 
 	| whitePawn blackPawn board squares |
