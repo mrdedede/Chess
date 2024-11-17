@@ -13,6 +13,11 @@ NullPiece >> isNullPiece [
 	^ true.
 ]
 
+{ #category : 'testing' }
+NullPiece >> isWhite [ 
+	^ false
+]
+
 { #category : 'accessing' }
 NullPiece >> nullPieceColor [
     ^ Color transparent
