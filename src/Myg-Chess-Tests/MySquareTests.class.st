@@ -9,14 +9,18 @@ Class {
 }
 
 { #category : 'tests' }
-MySquareTests >> testBoard [ 
+MySquareTests >> testBoard [
 
-	| board square |
+	|square piece board|
 	board := MyChessBoard empty.
 	square := MyChessSquare new.
-	square board: board.
+	square color: Color black.
+	square name: 'e4'.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
 
-	self assert: square board isNotNil .
+	self assert: square contents equals: piece.
 ]
 
 { #category : 'tests' }
