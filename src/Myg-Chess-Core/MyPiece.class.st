@@ -47,7 +47,7 @@ MyPiece >> collectSquares: aBlock [
 MyPiece >> collectSquares: aBlock legal: shouldBeLegal [
 
 	^ self collectSquares: aBlock while: [ :aSquare |
-		  aSquare notNil and: [ shouldBeLegal ==> aSquare hasPiece not ] ]
+		  (aSquare isKindOf: MyNullChessSquare) not and: [ shouldBeLegal ==> aSquare hasPiece not ] ]
 ]
 
 { #category : 'rendering' }
@@ -220,7 +220,9 @@ MyPiece >> upFile [
 { #category : 'rendering' }
 MyPiece >> upFileLegal: aBoolean [
 
-	^ self collectSquares: [ :aSquare | aSquare up ] legal: aBoolean
+	^ self collectSquares: [ :aSquare | 
+    ([ (aSquare isKindOf: MyNullChessSquare) not ] and: aSquare up ) 
+] legal: aBoolean
 ]
 
 { #category : 'rendering' }
@@ -232,7 +234,10 @@ MyPiece >> upLeftDiagonal [
 { #category : 'rendering' }
 MyPiece >> upLeftDiagonalLegal: aBoolean [
 
-	^ self collectSquares: [ :aSquare | aSquare up ifNotNil: #left ] legal: aBoolean
+ self collectSquares: [ :aSquare | 
+    (aSquare up and: [ (aSquare isKindOf: MyNullChessSquare) not ]) 
+        ifTrue: [ #left ] 
+] legal: aBoolean
 ]
 
 { #category : 'rendering' }
