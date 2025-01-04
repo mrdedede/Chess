@@ -2,7 +2,8 @@ Class {
 	#name : 'MyPawn',
 	#superclass : 'MyPiece',
 	#instVars : [
-		'hasMoved'
+		'hasMoved',
+		'enPassantTarget'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -26,6 +27,35 @@ MyPawn >> captureMoves [
 
     ^ captureMoves
 
+]
+
+{ #category : 'initialization' }
+MyPawn >> enPassantTargetSquares [
+	| enPassantMoves lastMove enemySquare targetSquare |
+    enPassantTarget ifNotNil: [ ^ OrderedCollection with: enPassantTarget ].
+
+    enPassantMoves := OrderedCollection new.
+    lastMove := square board game lastMove.
+
+    lastMove ifNotNil: [
+        (lastMove piece isPawn
+            and: ([ (lastMove startSquare file asInteger - lastMove endSquare file asInteger) abs = 2 ]))
+					ifTrue: [
+						self isInTheGoodLineForEnPassant 
+						ifTrue: [  
+                enemySquare := lastMove endSquare.
+                (self square columnDifference: enemySquare) abs = 1
+                    ifTrue: [
+                        targetSquare := (self isWhite
+                            ifTrue: [ enemySquare up ]
+                            ifFalse: [ enemySquare down ]).
+                        enPassantTarget := targetSquare. "Stocker la case pour un accès ultérieur"
+                        enPassantMoves add: targetSquare.
+                    ].
+					].
+            ].
+    ].
+    ^ enPassantMoves
 ]
 
 { #category : 'accessing' }
@@ -79,16 +109,51 @@ MyPawn >> id [
 	^ 'P'
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 MyPawn >> initialize [ 
 	super initialize.
-	hasMoved := false
+	hasMoved := false.
+	enPassantTarget := nil
+]
+
+{ #category : 'initialization' }
+MyPawn >> isInTheGoodLineForEnPassant [ 
+	^ self isWhite 
+		ifTrue: [ square file = $5 ] 
+		ifFalse: [ square file = $4 ] 
+]
+
+{ #category : 'initialization' }
+MyPawn >> isPawn [ 
+    ^ true
+
 ]
 
 { #category : 'accessing' }
-MyPawn >> moveTo: aSquare [ 
-	super moveTo: aSquare.
-	hasMoved := true
+MyPawn >> moveTo: aSquare [
+  
+    | enPassantTargetSquare |
+    
+  super moveTo: aSquare.
+	hasMoved := true.
+	
+    "Détermine si le déplacement correspond à une capture en passant"
+    enPassantTargetSquare := (self enPassantTargetSquares includes: aSquare)
+        ifTrue: [
+            self isWhite 
+                ifTrue: [aSquare down] 
+                ifFalse: [aSquare up]
+        ].
+
+    "Effectue la capture en passant si applicable"
+    enPassantTargetSquare ifNotNil: [enPassantTargetSquare emptyContents].
+
+    "Effectue le déplacement standard"
+    super moveTo: aSquare.
+
+    "Réinitialise la cible de capture en passant après le déplacement"
+    enPassantTarget := nil.
+
 ]
 
 { #category : 'rendering' }
@@ -99,7 +164,7 @@ MyPawn >> renderPieceOn: aSquare [
 
 { #category : 'rendering' }
 MyPawn >> targetSquaresLegal: aBoolean [ 
-    | forwardMoves captureMoves |
+    | forwardMoves captureMoves enPassant|
 
     "Obtenir les mouvements en avant"
     forwardMoves := self forwardMoves.
@@ -107,8 +172,9 @@ MyPawn >> targetSquaresLegal: aBoolean [
     "Obtenir les mouvements de capture"
     captureMoves := self captureMoves.
 
-    
-    "Combiner les   mouvements"
-    ^ captureMoves , forwardMoves 
+    "Obtenir les mouvements en passant"
+    enPassant ifNil: [ enPassant := self enPassantTargetSquares ].
+    "Combiner les trois types de mouvements"
+    ^ captureMoves , forwardMoves , enPassant
 
 ]
