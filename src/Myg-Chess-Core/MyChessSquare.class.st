@@ -170,6 +170,11 @@ MyChessSquare >> initialize [
 ]
 
 { #category : 'accessing' }
+MyChessSquare >> isNullChessSquare [
+	^false
+]
+
+{ #category : 'accessing' }
 MyChessSquare >> left [
 
 	^ self + (-1 @ 0)

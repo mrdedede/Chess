@@ -37,7 +37,7 @@ MyChessBoard class >> new [
 { #category : 'accessing' }
 MyChessBoard >> at: coordinate [
 
-	^ grid at: coordinate ifAbsent: nil
+	^ grid at: coordinate ifAbsent: MyNullChessSquare new
 ]
 
 { #category : 'accessing' }
@@ -190,15 +190,7 @@ MyChessBoard >> initializeSquares [
 
 	| black |
 	black := false.
-	$k asciiValue to: $n asciiValue do: [ :column |
-		10 to: 9 by: -1 do: [ :file |
-			| squareNotation square |
-			squareNotation := column asCharacter asString , file asString.
-			square := MyNullChessSquare new.
-			square name: squareNotation.
-			grid at: squareNotation put: square.
-			self addChild: square ].
-		black := black not ].
+	
 	$a asciiValue to: $h asciiValue do: [ :column |
 		8 to: 1 by: -1 do: [ :file |
 			| squareNotation square |
