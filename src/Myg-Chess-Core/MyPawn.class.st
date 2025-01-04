@@ -134,8 +134,7 @@ MyPawn >> moveTo: aSquare [
   
     | enPassantTargetSquare |
     
-  super moveTo: aSquare.
-	hasMoved := true.
+   ((self targetSquaresLegal: true) includes: aSquare) ifFalse: [ ^ self ].
 	
     "Détermine si le déplacement correspond à une capture en passant"
     enPassantTargetSquare := (self enPassantTargetSquares includes: aSquare)
