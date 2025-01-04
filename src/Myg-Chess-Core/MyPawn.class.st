@@ -9,6 +9,61 @@ Class {
 }
 
 { #category : 'accessing' }
+MyPawn >> captureMoves [ 
+    | forwardDirection captureMoves |
+
+    forwardDirection := self forwardDirection.
+
+    "Calcul des cases diagonales pour les captures"
+    captureMoves := {
+        (self square + (-1 @ forwardDirection)).
+        (self square + (1 @ forwardDirection)) }.
+
+    "Filtrer uniquement les cases capturables"
+    captureMoves := captureMoves select: [ :s |
+        s notNil and: [
+            s hasPiece and: [ s contents color ~= self color ] ] ].
+
+    ^ captureMoves
+
+]
+
+{ #category : 'accessing' }
+MyPawn >> forwardDirection [ 
+    ^ self isWhite
+        ifTrue: [ 1 ]
+        ifFalse: [ -1 ]
+
+]
+
+{ #category : 'accessing' }
+MyPawn >> forwardMoves [ 
+    | forwardMoves nextSquare |
+
+    forwardMoves := OrderedCollection new.
+
+    "Vérifie la case directement devant"
+    nextSquare := self isWhite
+                      ifTrue: [ self square up ]
+                      ifFalse: [ self square down ].
+
+    "Ajoute la première case si elle est libre"
+    (nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
+        forwardMoves add: nextSquare.
+
+        "Vérifie le double mouvement initial seulement si la première case est libre"
+        self hasMoved ifFalse: [
+            nextSquare := self isWhite
+                              ifTrue: [ nextSquare up ]
+                              ifFalse: [ nextSquare down ].
+            (nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
+                forwardMoves add: nextSquare ] ] ].
+
+    ^ forwardMoves
+
+]
+
+{ #category : 'accessing' }
 MyPawn >> hasMoved [ 
 	^ hasMoved 
 ]
@@ -43,40 +98,17 @@ MyPawn >> renderPieceOn: aSquare [
 ]
 
 { #category : 'rendering' }
-MyPawn >> targetSquaresLegal: aBoolean [
+MyPawn >> targetSquaresLegal: aBoolean [ 
+    | forwardMoves captureMoves |
 
-	| possibleMoves captureMoves forwardDirection nextSquare |
-	forwardDirection := self isWhite
-		                    ifTrue: [ 1 ]
-		                    ifFalse: [ -1 ].
+    "Obtenir les mouvements en avant"
+    forwardMoves := self forwardMoves.
 
-	"Vérifie d'abord la case directement devant"
-	nextSquare := self isWhite
-		              ifTrue: [ square up ]
-		              ifFalse: [ square down ].
+    "Obtenir les mouvements de capture"
+    captureMoves := self captureMoves.
 
-	possibleMoves := OrderedCollection new.
+    
+    "Combiner les   mouvements"
+    ^ captureMoves , forwardMoves 
 
-	"Ajoute la première case si elle est libre"
-	(nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
-		possibleMoves add: nextSquare.
-
-		"Vérifie le double mouvement initial seulement si la première case est libre"
-		self hasMoved ifFalse: [
-			nextSquare := self isWhite
-				              ifTrue: [ nextSquare up ]
-				              ifFalse: [ nextSquare down ].
-			(nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
-				possibleMoves add: nextSquare ] ] ].
-
-	"Calcul des mouvements de capture"
-	captureMoves := {
-		                (square + (-1 @ forwardDirection)).
-		                (square + (1 @ forwardDirection)) }.
-
-	captureMoves := captureMoves select: [ :s |
-		                s notNil and: [
-			                s hasPiece and: [ s contents color ~= self color ] ] ].
-
-	^ captureMoves , possibleMoves
 ]
