@@ -90,3 +90,72 @@ Tous les mouvements légaux des pions sont désormais conformes aux règles d'é
 ## **Conclusion**
 
 Ce projet a permis d'explorer des techniques avancées de débogage et de validation des règles de jeu par le biais de tests unitaires. Grâce à une approche incrémentale, il a été possible de corriger les bugs existants, d'ajouter des fonctionnalités complexes et de garantir leur robustesse. Cette méthodologie peut être utilisée pour étendre le jeu à d'autres pièces à l'avenir.
+
+# Rapport sur la Suppression des Vérifications de Nil dans le Jeu d'Échecs de Salas Merzouk
+
+## Objectif du Projet
+
+Le but principal de ce projet était d'éliminer les vérifications explicites de `nil` dans le code existant en utilisant des concepts de **polymorphisme** et de **design patterns**. Cette refactorisation visait à améliorer la lisibilité, la maintenabilité et la robustesse du code.
+
+## Problème Initial
+
+Dans le code original, les cases et les pièces pouvaient être `nil` pour représenter une absence. Par conséquent, plusieurs méthodes contenaient des vérifications explicites sur `nil`. Ces vérifications alourdissaient le code et violaient le principe **Tell, Don't Ask** en obligeant à tester des états au lieu d'utiliser des comportements définis par des objets.
+
+## Solution Adoptée
+
+Pour remplacer ces vérifications, j'ai adopté le **Null Object Pattern**, créant des objets spécifiques pour représenter l'absence de pièces et de cases.
+
+### 1. Création de `MyNullPiece`
+
+J'ai créé une classe `MyNullPiece` comme sous-classe de `MyPiece`. Cette classe représente une pièce inexistante et implémente des méthodes neutres.
+
+### 2. Création de `MyNullChessSquare`
+
+J'ai également créé une classe `MyNullChessSquare` comme sous-classe de `MyChessSquare` pour représenter les cases inexistantes (en dehors du plateau). Cette classe implémente des méthodes appropriées.
+
+### 3. Remplacement des Vérifications de Nil
+
+J'ai modifié les méthodes dans les différentes classes (par exemple, `MyPawn`, `MyMove`) pour remplacer les tests `isNil` par des appels aux méthodes `isNullPiece` et `isNullChessSquare`.
+
+### 4. Adaptations dans les Classes Affectées
+
+J'ai passé en revue toutes les classes impactées et adapté leurs méthodes :
+
+-   `MyPawn` : Gestion des mouvements en passant et captures.
+-   `MyPiece` : Gestion des déplacements des pieces.
+-   `ChessBoard` : Initialisation des cases et gestion des limites du plateau.
+
+### 5. Tests Unitaires
+
+J'ai ajouté et adapté des tests pour valider ces modifications :
+
+-   Test des comportements des objets nuls (mouvements, captures, validations).
+-   Test des interactions entre pièces et cases.
+-   Test des mouvements en dehors du plateau.
+
+## Difficultés Rencontrées
+
+*   **Propagation des changements :** Chaque vérification de `nil` pouvait impacter plusieurs méthodes dans différentes classes, nécessitant une refactorisation en profondeur.
+*   **Gestion des erreurs :** Certaines erreurs survenaient après remplacement des tests, notamment lors d'appels à des méthodes sur des objets non initialisés. Ces erreurs ont été corrigées en ajoutant des valeurs par défaut comme des instances de `MyNullChessSquare`.
+*   **Fusion avec les modifications des collègues :** Les changements apportés ont eu un impact significatif sur les autres branches du projet, rendant les fusions complexes. Il a fallu coordonner avec les collègues pour résoudre les conflits et aligner leurs modifications sur la nouvelle architecture basée sur des objets nuls.
+
+## Résultats et Bénéfices
+
+1.  Suppression complète des tests explicites sur `nil`.
+2.  Utilisation de l'héritage et du polymorphisme pour simplifier la logique.
+3.  Code plus clair, plus lisible et plus facile à déboguer.
+4.  Tests assurant la robustesse du code après refactorisation.
+5.  **Réduction des vérifications explicites de `nil` :** Le code est devenu plus lisible et maintenable.
+6.  **Utilisation du polymorphisme :** Simplification des comportements spécifiques grâce aux classes d'objets nuls.
+7.  **Robustesse accrue :** Moins de risques d'erreurs dues à des valeurs nulles inattendues.
+8.  **Tests améliorés :** Des tests supplémentaires garantissent la stabilité des nouvelles implémentations.
+
+
+## Conclusion
+
+Ce projet a démontré l'importance de l'utilisation d'objets nuls et de polymorphisme pour améliorer la qualité du code. Les difficultés rencontrées, bien que significatives, ont été surmontées grâce à des efforts de collaboration et des tests rigoureux. Ce travail sert de base pour de futures améliorations du jeu d'échecs et d'autres projets nécessitant des pratiques de développement similaires.
+
+---
+
+**Auteur : Merzouk Salas**\
+**Date : Janvier 2025**
