@@ -155,6 +155,8 @@ MyPawn >> moveTo: aSquare [
 
     "Réinitialise la cible de capture en passant après le déplacement"
     enPassantTarget := nil.
+    hasMoved := true.
+
 
 ]
 
