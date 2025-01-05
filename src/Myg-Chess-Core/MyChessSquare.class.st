@@ -91,10 +91,7 @@ MyChessSquare >> contents: aPiece [
 	| text |
 	contents := aPiece.
 
-	text := contents
-		        ifNil: [
-			        contents := NullPiece new.]
-		        ifNotNil: [ contents renderPieceOn: self ].
+	text := contents renderPieceOn: self.
 	piece text: (text asRopedText
 			 fontSize: 48;
 			 foreground: self foreground;
