@@ -9,18 +9,14 @@ Class {
 }
 
 { #category : 'tests' }
-MySquareTests >> testBoard [
+MySquareTests >> testBoard [ 
 
-	|square piece board|
+	| board square |
 	board := MyChessBoard empty.
 	square := MyChessSquare new.
-	square color: Color black.
-	square name: 'e4'.
-	square := board at: 'e4'.
-	piece := MyPawn white .
-	square contents: piece .
+	square board: board.
 
-	self assert: square contents equals: piece.
+	self assert: square board isNotNil .
 ]
 
 { #category : 'tests' }
@@ -82,7 +78,7 @@ MySquareTests >> testEmptyContents [
 	square contents: piece .
 	square emptyContents .
 
-	self deny: square contents equals: nil.
+	self assert: square contents equals: nil.
 ]
 
 { #category : 'tests' }
@@ -100,6 +96,20 @@ MySquareTests >> testEmptyContentsWithoutNilChecks [
 ]
 
 { #category : 'tests' }
+MySquareTests >> testHasPiece [ 
+
+	|square piece board|
+	board := MyChessBoard empty.
+	square := MyChessSquare new.
+	square := board at: 'e4'.
+	piece := MyPawn white .
+	square contents: piece .
+	square hasPiece .
+
+	self deny: square contents equals: nil.
+]
+
+{ #category : 'tests' }
 MySquareTests >> testHasPieceWithoutNilChecks [
 
 	|square piece board|
@@ -110,7 +120,31 @@ MySquareTests >> testHasPieceWithoutNilChecks [
 	square contents: piece .
 	square hasPiece .
 
-	self assert: square hasPiece equals: piece isNullPiece not.
+	self assert: square hasPiece equals: piece.
+]
+
+{ #category : 'tests' }
+MySquareTests >> testInitializeBackgroudColorIsBlack [
+
+    | square |
+    square := MyChessSquare new.
+    
+    "Test that the background is white"
+    self assert: square background equals: Color black.
+    
+  
+]
+
+{ #category : 'tests' }
+MySquareTests >> testInitializeBackgroudColorIsWhite [
+
+    | square |
+    square := MyChessSquare new.
+    
+    "Test that the background is white"
+    self assert: square background equals: Color white.
+    
+  
 ]
 
 { #category : 'tests' }

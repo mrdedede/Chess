@@ -47,7 +47,7 @@ MyPiece >> collectSquares: aBlock [
 MyPiece >> collectSquares: aBlock legal: shouldBeLegal [
 
 	^ self collectSquares: aBlock while: [ :aSquare |
-		  (aSquare isNullChessSquare not) and: [ shouldBeLegal ==> aSquare hasPiece not ] ]
+		  aSquare notNil and: [ shouldBeLegal ==> aSquare hasPiece not ] ]
 ]
 
 { #category : 'rendering' }
@@ -57,7 +57,7 @@ MyPiece >> collectSquares: collectBlock while: untilBlock [
 	targets := OrderedCollection new.
 
 	"Collect up right"
-	next := self square.
+	next := square.
 	[ untilBlock value: (next := collectBlock value: next) ]
 		whileTrue: [ targets add: next ].
 
@@ -101,7 +101,7 @@ MyPiece >> downLeftDiagonal [
 MyPiece >> downLeftDiagonalLegal: aBoolean [
 
 	^ self
-		  collectSquares: [ :aSquare | aSquare down left ]
+		  collectSquares: [ :aSquare | aSquare down ifNotNil: #left ]
 		  legal: aBoolean
 ]
 
@@ -115,7 +115,7 @@ MyPiece >> downRightDiagonal [
 MyPiece >> downRightDiagonalLegal: aBoolean [
 
 	^ self
-		  collectSquares: [ :aSquare | aSquare down right ]
+		  collectSquares: [ :aSquare | aSquare down ifNotNil: #right ]
 		  legal: aBoolean
 ]
 
@@ -237,8 +237,7 @@ MyPiece >> upLeftDiagonal [
 { #category : 'rendering' }
 MyPiece >> upLeftDiagonalLegal: aBoolean [
 
-	^ self collectSquares: [ :aSquare | aSquare up left ]
-	legal: aBoolean
+	^ self collectSquares: [ :aSquare | aSquare up ifNotNil: #left ] legal: aBoolean
 ]
 
 { #category : 'rendering' }
@@ -251,6 +250,6 @@ MyPiece >> upRightDiagonal [
 MyPiece >> upRightDiagonalLegal: aBoolean [
 
 	^ self
-		  collectSquares: [ :aSquare | aSquare up right ]
+		  collectSquares: [ :aSquare | aSquare up ifNotNil: #right ]
 		  legal: aBoolean
 ]
