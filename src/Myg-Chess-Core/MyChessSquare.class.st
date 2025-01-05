@@ -80,6 +80,12 @@ MyChessSquare >> column [
 	^ name first
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessSquare >> columnDifference: anotherSquare [
+    "Retourne la différence en termes de colonnes entre cette case et anotherSquare."
+    ^ (self column asInteger - anotherSquare column asInteger) abs
+]
+
 { #category : 'accessing' }
 MyChessSquare >> contents [
 	^ contents
