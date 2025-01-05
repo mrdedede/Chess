@@ -131,23 +131,26 @@ MyPawn >> isPawn [
 
 { #category : 'accessing' }
 MyPawn >> moveTo: aSquare [
-  
     | enPassantTargetSquare |
-    
-   ((self targetSquaresLegal: true) includes: aSquare) ifFalse: [ ^ self ].
-	
+
+    "Vérifie si le mouvement est légal avant de procéder"
+    ((self targetSquaresLegal: true) includes: aSquare) ifFalse: [ ^ self ].
+
     "Détermine si le déplacement correspond à une capture en passant"
     enPassantTargetSquare := (self enPassantTargetSquares includes: aSquare)
         ifTrue: [
-            self isWhite 
+            "Si la capture en passant est possible, détermine la nouvelle position"
+            self isWhite
                 ifTrue: [aSquare down] 
-                ifFalse: [aSquare up]
+                ifFalse: [aSquare up].
         ].
 
-    "Effectue la capture en passant si applicable"
-    enPassantTargetSquare ifNotNil: [enPassantTargetSquare emptyContents].
+    "Effectue la capture en passant si une cible a été déterminée"
+    enPassantTargetSquare ifNotNil: [
+        enPassantTargetSquare emptyContents. "Vide le contenu de la case capturée"
+    ].
 
-    "Effectue le déplacement standard"
+    "Effectue le déplacement du pion vers la case cible"
     super moveTo: aSquare.
 
     "Réinitialise la cible de capture en passant après le déplacement"
@@ -162,8 +165,8 @@ MyPawn >> renderPieceOn: aSquare [
 ]
 
 { #category : 'rendering' }
-MyPawn >> targetSquaresLegal: aBoolean [ 
-    | forwardMoves captureMoves enPassant|
+MyPawn >> targetSquaresLegal: aBoolean [
+    | forwardMoves captureMoves enPassant |
 
     "Obtenir les mouvements en avant"
     forwardMoves := self forwardMoves.
@@ -171,8 +174,9 @@ MyPawn >> targetSquaresLegal: aBoolean [
     "Obtenir les mouvements de capture"
     captureMoves := self captureMoves.
 
-    "Obtenir les mouvements en passant"
-    enPassant ifNil: [ enPassant := self enPassantTargetSquares ].
+    "Obtenir les mouvements en passant, calculé une seule fois si nécessaire"
+    enPassant := enPassant ifNil: [ self enPassantTargetSquares ].
+
     "Combiner les trois types de mouvements"
     ^ captureMoves , forwardMoves , enPassant
 
