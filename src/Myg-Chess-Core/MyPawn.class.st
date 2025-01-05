@@ -22,7 +22,7 @@ MyPawn >> captureMoves [
 
     "Filtrer uniquement les cases capturables"
     captureMoves := captureMoves select: [ :s |
-        s notNil and: [
+        s isNullChessSquare not and: [
             s hasPiece and: [ s contents color ~= self color ] ] ].
 
     ^ captureMoves
@@ -32,12 +32,18 @@ MyPawn >> captureMoves [
 { #category : 'initialization' }
 MyPawn >> enPassantTargetSquares [
 	| enPassantMoves lastMove enemySquare targetSquare |
-    enPassantTarget ifNotNil: [ ^ OrderedCollection with: enPassantTarget ].
+    
+	"Obtain the last move and handle cases where it might be nil"
+    lastMove := square board game lastMove ifNil: [ MyNullChessSquare new ].
+
+	 "Check if enPassantTarget is valid"
+    (enPassantTarget isNullChessSquare) ifFalse: [ ^ OrderedCollection with: enPassantTarget ].
 
     enPassantMoves := OrderedCollection new.
+
     lastMove := square board game lastMove.
 
-    lastMove ifNotNil: [
+   ((lastMove isKindOf: MyMove) and: [ lastMove endSquare isNullChessSquare not ]) ifTrue: [
         (lastMove piece isPawn
             and: ([ (lastMove startSquare file asInteger - lastMove endSquare file asInteger) abs = 2 ]))
 					ifTrue: [
@@ -78,7 +84,7 @@ MyPawn >> forwardMoves [
                       ifFalse: [ self square down ].
 
     "Ajoute la première case si elle est libre"
-    (nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
+    (nextSquare isNullChessSquare not and: [ nextSquare hasPiece not ]) ifTrue: [
         forwardMoves add: nextSquare.
 
         "Vérifie le double mouvement initial seulement si la première case est libre"
@@ -86,7 +92,7 @@ MyPawn >> forwardMoves [
             nextSquare := self isWhite
                               ifTrue: [ nextSquare up ]
                               ifFalse: [ nextSquare down ].
-            (nextSquare notNil and: [ nextSquare hasPiece not ]) ifTrue: [
+            (nextSquare isNullChessSquare not and: [ nextSquare hasPiece not ]) ifTrue: [
                 forwardMoves add: nextSquare ] ] ].
 
     ^ forwardMoves
@@ -113,7 +119,7 @@ MyPawn >> id [
 MyPawn >> initialize [ 
 	super initialize.
 	hasMoved := false.
-	enPassantTarget := nil
+	enPassantTarget := MyNullChessSquare new.
 ]
 
 { #category : 'initialization' }
@@ -146,7 +152,8 @@ MyPawn >> moveTo: aSquare [
         ].
 
     "Effectue la capture en passant si une cible a été déterminée"
-    enPassantTargetSquare ifNotNil: [
+    enPassantTargetSquare := enPassantTargetSquare ifNil: [ MyNullChessSquare new ].
+    enPassantTargetSquare isNullChessSquare ifFalse: [
         enPassantTargetSquare emptyContents. "Vide le contenu de la case capturée"
     ].
 
@@ -154,7 +161,7 @@ MyPawn >> moveTo: aSquare [
     super moveTo: aSquare.
 
     "Réinitialise la cible de capture en passant après le déplacement"
-    enPassantTarget := nil.
+    enPassantTarget := MyNullChessSquare new.
     hasMoved := true.
 
 
@@ -176,8 +183,12 @@ MyPawn >> targetSquaresLegal: aBoolean [
     "Obtenir les mouvements de capture"
     captureMoves := self captureMoves.
 
+	enPassant := MyNullChessSquare new.
+
     "Obtenir les mouvements en passant, calculé une seule fois si nécessaire"
-    enPassant := enPassant ifNil: [ self enPassantTargetSquares ].
+    enPassant := enPassant isNullChessSquare 
+    ifTrue: [ self enPassantTargetSquares ].
+
 
     "Combiner les trois types de mouvements"
     ^ captureMoves , forwardMoves , enPassant
