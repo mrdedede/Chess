@@ -25,6 +25,11 @@ MyPiece class >> white [
 		  yourself
 ]
 
+{ #category : 'visiting' }
+MyPiece >> acceptVisitor: visitor [
+	^self subclassResponsibility.
+]
+
 { #category : 'as yet unclassified' }
 MyPiece >> attackingSquares [
 

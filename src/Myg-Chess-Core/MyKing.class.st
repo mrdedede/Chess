@@ -8,7 +8,7 @@ Class {
 { #category : 'as yet unclassified' }
 MyKing >> attackingSquares [
 	|forbiddenSquares basicSquares sqVisitor|
-	sqVisitor := MySquareVisitor new.
+	sqVisitor := MySquareChecker new.
 	forbiddenSquares := sqVisitor analysedPiece: self.
 	forbiddenSquares := forbiddenSquares flatCollect: [ :each | each ].
 	
